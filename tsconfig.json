@@ -14,8 +14,7 @@
     "typeRoots": ["./node_modules/@types", "./src/@types"],
     "baseUrl": "./",
     "paths": {
-      "@/*":["./src/*"],
-      "@helps/*":["./src/helps/*"],
+      "@helpers/*":["./src/helpers/*"],
       "@libs/*":["./src/libs/*"],
       "@modules/*":["./src/modules/*"],
       "@routes/*":["./src/routes/*"],
