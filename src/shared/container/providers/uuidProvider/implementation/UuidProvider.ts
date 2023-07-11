@@ -1,13 +1,14 @@
-import { v4 as uuidV4, validate } from "uuid";
+import { v4 as uuidv4, validate } from "uuid";
 import { IUuidProvider } from "../IUuidProvider";
 
 class UuidProvider implements IUuidProvider {
   createUUID(): string {
-    return uuidV4();
+    return uuidv4();
   }
 
   validateUUID(uuid: string): boolean {
     return validate(uuid);
   }
 }
+
 export { UuidProvider };

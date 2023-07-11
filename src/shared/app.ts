@@ -1,14 +1,15 @@
 import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
 import cors from "cors";
-import helmet from "helmet";
 import dotenv from "dotenv";
+import helmet from "helmet";
 
 import "reflect-metadata";
 import "./container";
 
 import { router } from "@routes/index";
-import { AppError } from "@helpers/errosHandler";
+
+import { AppError } from "@helpers/errorsHandler";
 
 dotenv.config();
 
@@ -39,4 +40,4 @@ app.use(
 
 export { app };
 
-// REQ -> ROUTES  -> CONTROLLER <-> USECADE <-> RESPODITORY <-> PRISMA <-> DATABASE
+// REQ ->(Server -> app) ROUTES -> MIDDLEWARE -> CONTROLLER(RES) <-> USECASE <-> REPOSITORY <-> PRISMA <-> DATABASE

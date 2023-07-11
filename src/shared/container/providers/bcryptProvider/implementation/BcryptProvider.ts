@@ -1,4 +1,5 @@
 import { IBcryptProvider, IBcrypt } from "../IBcryptProvider";
+
 import bcryptjs from "bcryptjs";
 
 class BcryptProvider implements IBcryptProvider {
@@ -8,6 +9,12 @@ class BcryptProvider implements IBcryptProvider {
 
     return { salt, hash };
   }
-}
 
+  async checkPassword(
+    password: string,
+    encryptedPassword: string
+  ): Promise<boolean> {
+    return bcryptjs.compare(password, encryptedPassword);
+  }
+}
 export { BcryptProvider };

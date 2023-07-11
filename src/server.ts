@@ -1,5 +1,5 @@
 import { app } from "@shared/app";
 
 app.listen(process.env.APP_PORT, () => {
-  console.log("🚀 HTTP Server is rumming!");
+  console.log("📡 http server is running");
 });
