@@ -13,4 +13,5 @@ userRoutes.use(authentication);
 userRoutes.put("/", new UpdateUserController().handle);
 userRoutes.delete("/", new InactivateUserController().handle);
 
+
 export { userRoutes };
