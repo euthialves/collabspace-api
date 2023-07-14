@@ -22,18 +22,30 @@ class ListAllPostsUseCase {
 
     const total = await this.PostRepository.count();
 
-    const posts = listAll.map((post) => ({
-      id: post.id,
-      content: post.content,
-      tags: post.tags,
-      visibility: post.visibility,
-      publishedAt: post.published_at,
-      user: {
-        id: post.users.id,
-        name: post.users.name,
-        avatarUrl: post.users.avatar_url,
-      },
-    }));
+    const posts = listAll.map((post) => {
+      const comments = post.comments.map((comment) => ({
+        id: comment.id,
+        user: {
+          id: comment.users.id,
+          name: comment.users.name,
+          avatarUrl: comment.users.avatar_url,
+        },
+        commentedAt: comment.commented_at,
+      }));
+      return {
+        id: post.id,
+        content: post.content,
+        tags: post.tags,
+        visibility: post.visibility,
+        publishedAt: post.published_at,
+        user: {
+          id: post.users.id,
+          name: post.users.name,
+          avatarUrl: post.users.avatar_url,
+        },
+        comments,
+      };
+    });
 
     return new AppResponse({
       message: "Posts listados com sucesso!",
