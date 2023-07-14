@@ -1,6 +1,6 @@
 import { AppError } from "@helpers/errorsHandler";
 import { AppResponse } from "@helpers/responseParser";
-import { ICommentRepositories } from "@modules/comments/IRepositories/ICommentesRepositories";
+import { ICommentRepositories } from "@modules/comments/IRepositories/ICommentsRepositories";
 import { IRequestCreatComment } from "@modules/comments/dtos/comments";
 import { PostRepository } from "@modules/posts/repositories/PostRepository";
 import { IUuidProvider } from "@shared/container/providers/uuidProvider/IUuidProvider";

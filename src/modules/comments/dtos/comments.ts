@@ -16,4 +16,19 @@ interface ICreatComment {
   content: string;
 }
 
-export { IComment, ICreatComment, IRequestCreatComment };
+interface IRequestUpdateComment {
+  content: string;
+}
+
+interface IUpdateComment {
+  id: string;
+  content: string;
+}
+
+export {
+  IComment,
+  ICreatComment,
+  IRequestCreatComment,
+  IRequestUpdateComment,
+  IUpdateComment,
+};
