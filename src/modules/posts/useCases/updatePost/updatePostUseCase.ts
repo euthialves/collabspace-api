@@ -1,9 +1,9 @@
-import { AppError } from "@helpers/errorsHandler";
-import { AppResponse } from "@helpers/responseParser";
-import { IRequestUpdatePost } from "@modules/posts/dtos/posts";
+import { inject, injectable } from "tsyringe";
 import { IPostsRepositories } from "@modules/posts/iRepositories/IPostsRepositories";
 import { IUuidProvider } from "@shared/container/providers/uuidProvider/IUuidProvider";
-import { inject, injectable } from "tsyringe";
+import { IRequestUpdatePost } from "@modules/posts/dtos/posts";
+import { AppResponse } from "@helpers/responseParser";
+import { AppError } from "@helpers/errorsHandler";
 
 interface IRequest extends IRequestUpdatePost {
   usrId: string;
@@ -46,12 +46,14 @@ class UpdatePostUseCase {
         message: "Operação não permitida!",
       });
     }
+
     await this.postRepository.update({
       id,
       content,
       tags,
       visibility,
     });
+
     return new AppResponse({
       message: "Post atualizado com sucesso!",
     });

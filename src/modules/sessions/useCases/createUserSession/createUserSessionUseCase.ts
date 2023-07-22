@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { sign } from "jsonwebtoken";
-import { AppError } from "@helpers/errorsHandler";
 import { AppResponse } from "@helpers/responseParser";
-import { IRequestCreateUserSession } from "@modules/sessions/dto/sessions";
+import { IRequestCreateUserSession } from "@modules/sessions/dtos/sessions";
 import { IUsersRepositories } from "@modules/users/iRepositories/IUsersRepositories";
+import { AppError } from "@helpers/errorsHandler";
 import { IBcryptProvider } from "@shared/container/providers/bcryptProvider/IBcryptProvider";
 
 @injectable()
@@ -23,13 +23,13 @@ class CreateUserSessionUseCase {
 
     if (!listUserByEmail) {
       throw new AppError({
-        message: "E-mail e/ou senha incorretos",
+        message: "E-mail ou senha incorretos!",
       });
     }
 
     if (!listUserByEmail.active) {
       throw new AppError({
-        message: "Usuário inválido",
+        message: "Usuário inativo!",
       });
     }
 
@@ -40,19 +40,21 @@ class CreateUserSessionUseCase {
 
     if (!passwordMatch) {
       throw new AppError({
-        message: "E-mail e/ou senha incorretos!",
+        message: "E-mail ou senha incorretos!",
       });
     }
+
     const tokenPayload = {
       id: listUserByEmail.id,
     };
+
     const token = sign({ tokenPayload }, process.env.JWT_SECRET_TOKEN, {
       subject: listUserByEmail.email,
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
 
     return new AppResponse({
-      message: "Usuário logado com sucesso",
+      message: "Usuário logado com sucesso!",
       data: {
         token,
         user: {
@@ -60,12 +62,13 @@ class CreateUserSessionUseCase {
           name: listUserByEmail.name,
           email: listUserByEmail.email,
           telephone: listUserByEmail.telephone,
-          birhDate: listUserByEmail.birth_date,
-          avartarUrl: listUserByEmail.avatar_url,
+          birthDate: listUserByEmail.birth_date,
+          avatarUrl: listUserByEmail.avatar_url,
           createdAt: listUserByEmail.created_at,
         },
       },
     });
   }
 }
+
 export { CreateUserSessionUseCase };

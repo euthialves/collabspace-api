@@ -1,9 +1,8 @@
 import { AppError } from "@helpers/errorsHandler";
 import { AppResponse } from "@helpers/responseParser";
-import { ICommentsRepositories } from "@modules/comments/IRepositories/ICommentsRepositories";
+import { ICommentsRepositories } from "@modules/comments/iRepositories/ICommentsRepositories";
 import { IPostsRepositories } from "@modules/posts/iRepositories/IPostsRepositories";
 import { IUuidProvider } from "@shared/container/providers/uuidProvider/IUuidProvider";
-
 import { inject, injectable } from "tsyringe";
 
 interface IRequest {
@@ -13,11 +12,11 @@ interface IRequest {
 }
 
 @injectable()
-class DeleteCommnetUseCase {
+class DeleteCommentUseCase {
   constructor(
     @inject("CommentRepository")
-    private CommentRepository: ICommentsRepositories,
-    @inject("PostRository")
+    private commentRepository: ICommentsRepositories,
+    @inject("PostRepository")
     private postRepository: IPostsRepositories,
     @inject("UuidProvider")
     private uuidProvider: IUuidProvider
@@ -26,7 +25,7 @@ class DeleteCommnetUseCase {
   async execute({ usrId, postId, id }: IRequest): Promise<AppResponse> {
     if (!this.uuidProvider.validateUUID(id)) {
       throw new AppError({
-        message: "CommetID é inválido!",
+        message: "CommentID é inválido!",
       });
     }
 
@@ -36,29 +35,30 @@ class DeleteCommnetUseCase {
       });
     }
 
-    const listCommentById = await this.CommentRepository.listById(id);
+    const listCommentById = await this.commentRepository.listById(id);
 
     if (!listCommentById) {
       throw new AppError({
-        statusCode: 401,
-        message: "comentário não enocntrado!",
+        message: "Comentário não encontrado!",
       });
     }
 
-    const listPostById = await this.CommentRepository.listById(postId);
+    const listPostById = await this.postRepository.listById(postId);
 
     if (!listPostById) {
       throw new AppError({
         message: "Post não encontrado!",
       });
     }
+
     if (usrId !== listCommentById.user_id && usrId !== listPostById.user_id) {
       throw new AppError({
-        message: "Operação não é permitida!",
+        statusCode: 401,
+        message: "Operação não permitida!",
       });
     }
 
-    await this.CommentRepository.delete(id);
+    await this.commentRepository.delete(id);
 
     return new AppResponse({
       message: "Comentário deletado com sucesso!",
@@ -66,4 +66,4 @@ class DeleteCommnetUseCase {
   }
 }
 
-export { DeleteCommnetUseCase };
+export { DeleteCommentUseCase };

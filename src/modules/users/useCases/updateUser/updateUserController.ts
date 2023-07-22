@@ -20,4 +20,5 @@ class UpdateUserController {
     return response.status(result.statusCode).json(result);
   }
 }
+
 export { UpdateUserController };

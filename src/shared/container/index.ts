@@ -1,13 +1,15 @@
-// inversão de dependencia
-import { IPostsRepositories } from "@modules/posts/iRepositories/IPostsRepositories";
-import "./providers";
+import { container } from "tsyringe";
 
 import { IUsersRepositories } from "@modules/users/iRepositories/IUsersRepositories";
 import { UserRepository } from "@modules/users/repositories/UserRepository";
-import { container } from "tsyringe";
+import { IPostsRepositories } from "@modules/posts/iRepositories/IPostsRepositories";
 import { PostRepository } from "@modules/posts/repositories/PostRepository";
-import { ICommentRepositories } from "@modules/comments/IRepositories/ICommentsRepositories";
+import { ICommentsRepositories } from "@modules/comments/iRepositories/ICommentsRepositories";
 import { CommentRepository } from "@modules/comments/repositories/CommentRepository";
+import { IReactionsRepositories } from "@modules/reactions/iRepositories/IReactionsRepositories";
+import { ReactionRepository } from "@modules/reactions/repositories/ReactionRepository";
+import { IFriendRepositories } from "@modules/friends/iRepositories/IFriendRepositories";
+import { FriendRepository } from "@modules/friends/repositories/FriendRepository";
 
 container.registerSingleton<IUsersRepositories>(
   "UserRepository",
@@ -19,7 +21,17 @@ container.registerSingleton<IPostsRepositories>(
   PostRepository
 );
 
-container.registerSingleton<ICommentRepositories>(
+container.registerSingleton<ICommentsRepositories>(
   "CommentRepository",
   CommentRepository
+);
+
+container.registerSingleton<IReactionsRepositories>(
+  "ReactionRepository",
+  ReactionRepository
+);
+
+container.registerSingleton<IFriendRepositories>(
+  "FrendRepository",
+  FriendRepository
 );

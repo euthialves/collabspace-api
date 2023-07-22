@@ -31,6 +31,7 @@ app.use(
         message: err.message,
       });
     }
+
     return response.status(500).json({
       result: "error",
       message: `Internal server error - ${err.message}`,
@@ -40,4 +41,13 @@ app.use(
 
 export { app };
 
-// REQ ->(Server -> app) ROUTES -> MIDDLEWARE -> CONTROLLER(RES) <-> USECASE <-> REPOSITORY <-> PRISMA <-> DATABASE
+/* 
+  REQUEST -> 
+    ROUTES -> 
+      MIDDLEWARE ->
+        CONTROLLER(RESPONSE) <-> 
+          USECASE <-> 
+            REPOSITORY <-> 
+              PRISMA <-> 
+                DATABASE
+*/

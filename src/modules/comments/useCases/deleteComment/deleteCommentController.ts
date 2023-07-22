@@ -1,21 +1,22 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { DeleteCommnetUseCase } from "./deletCommentUseCase";
+import { DeleteCommentUseCase } from "./deleteCommentUseCase";
 
-class DeletCommentController {
+class DeleteCommentController {
   async handle(request: Request, response: Response) {
     const { usrId } = request;
     const { id, postId } = request.params as { id: string; postId: string };
 
-    const deleteCommentUseCase = container.resolve(DeleteCommnetUseCase);
+    const deleteCommentUseCase = container.resolve(DeleteCommentUseCase);
 
     const result = await deleteCommentUseCase.execute({
       usrId,
       postId,
       id,
     });
+
     return response.status(result.statusCode).json(result);
   }
 }
 
-export { DeletCommentController };
+export { DeleteCommentController };

@@ -5,11 +5,12 @@ interface IComment {
   content: string;
   commented_at: Date;
 }
-interface IRequestCreatComment {
+
+interface IRequestCreateComment {
   content: string;
 }
 
-interface ICreatComment {
+interface ICreateComment {
   id: string;
   postId: string;
   userId: string;
@@ -27,8 +28,8 @@ interface IUpdateComment {
 
 export {
   IComment,
-  ICreatComment,
-  IRequestCreatComment,
+  IRequestCreateComment,
+  ICreateComment,
   IRequestUpdateComment,
   IUpdateComment,
 };

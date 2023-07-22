@@ -1,13 +1,14 @@
-import { AppError } from "@helpers/errorsHandler";
-import { AppResponse } from "@helpers/responseParser";
+import { inject, injectable } from "tsyringe";
 import { IPostsRepositories } from "@modules/posts/iRepositories/IPostsRepositories";
 import { IUuidProvider } from "@shared/container/providers/uuidProvider/IUuidProvider";
-import { inject, injectable } from "tsyringe";
+import { AppResponse } from "@helpers/responseParser";
+import { AppError } from "@helpers/errorsHandler";
 
 interface IRequest {
   usrId: string;
   id: string;
 }
+
 @injectable()
 class DeletePostUseCase {
   constructor(
@@ -23,6 +24,7 @@ class DeletePostUseCase {
         message: "ID é inválido!",
       });
     }
+
     const listById = await this.postRepository.listById(id);
 
     if (!listById) {
@@ -37,10 +39,13 @@ class DeletePostUseCase {
         message: "Operação não permitida!",
       });
     }
+
     await this.postRepository.delete(id);
+
     return new AppResponse({
-      message: " Post deletado com sucesso!",
+      message: "Post deletado com sucesso!",
     });
   }
 }
+
 export { DeletePostUseCase };

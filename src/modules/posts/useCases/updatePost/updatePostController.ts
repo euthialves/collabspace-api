@@ -1,24 +1,26 @@
-import { IRequestCreatePost } from "@modules/posts/dtos/posts";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { IRequestUpdatePost } from "@modules/posts/dtos/posts";
 import { UpdatePostUseCase } from "./updatePostUseCase";
 
 class UpdatePostController {
-  async handle(request: Request, reponse: Response) {
+  async handle(request: Request, response: Response) {
     const { usrId } = request;
 
     const { id } = request.params as { id: string };
-    const { content, tags, visibility } = request.body as IRequestCreatePost;
+    const { content, tags, visibility } = request.body as IRequestUpdatePost;
 
-    const upadatePostUseCase = container.resolve(UpdatePostUseCase);
-    const result = await upadatePostUseCase.execute({
+    const updatePostUseCase = container.resolve(UpdatePostUseCase);
+
+    const result = await updatePostUseCase.execute({
       usrId,
       id,
       content,
       tags,
       visibility,
     });
-    return reponse.status(result.statusCode).json(result);
+
+    return response.status(result.statusCode).json(result);
   }
 }
 
