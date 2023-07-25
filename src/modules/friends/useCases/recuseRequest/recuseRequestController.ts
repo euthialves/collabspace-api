@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { DeleteReactionUseCase } from "./deleteReactionUseCase";
+import { RecuseRequestUseCase } from "./recuseRequestUseCase";
 
-class DeleteReactionController {
+class RecuseRequestController {
   async handle(req: Request, res: Response) {
     const { usrId } = req;
+
     const { id } = req.params as { id: string };
 
-    const deleteReactionUseCase = container.resolve(DeleteReactionUseCase);
+    const recuseRequestUseCase = container.resolve(RecuseRequestUseCase);
 
-    const result = await deleteReactionUseCase.execute({
+    const result = await recuseRequestUseCase.execute({
       usrId,
       id,
     });
@@ -18,4 +19,4 @@ class DeleteReactionController {
   }
 }
 
-export { DeleteReactionController };
+export { RecuseRequestController };

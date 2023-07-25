@@ -1,8 +1,8 @@
 import { prisma } from "@libs/prismaClient";
 import { ICreateFriend, IFriend, IUpdateActionStatus } from "../dtos/friends";
-import { IFriendRepositories } from "../iRepositories/IFriendRepositories";
+import { IFriendsRepositories } from "../iRepositories/IFriendsRepositories";
 
-class FriendRepository implements IFriendRepositories {
+class FriendRepository implements IFriendsRepositories {
   create({ id, userId1, userId2 }: ICreateFriend): Promise<IFriend> {
     return prisma.friends.create({
       data: {
@@ -13,7 +13,13 @@ class FriendRepository implements IFriendRepositories {
     });
   }
 
-  listAlreadyExist(userId1: string, userId2: string): Promise<IFriend | null> {
+  listById(id: string): Promise<IFriend | null> {
+    return prisma.friends.findFirst({
+      where: { id },
+    });
+  }
+
+  listAlreadyExists(userId1: string, userId2: string): Promise<IFriend | null> {
     return prisma.friends.findFirst({
       where: {
         user_id_1: userId1,
@@ -23,9 +29,9 @@ class FriendRepository implements IFriendRepositories {
   }
 
   async updateActionStatus({
-    id,
     actionId1,
     actionId2,
+    id,
   }: IUpdateActionStatus): Promise<void> {
     await prisma.friends.update({
       where: { id },
@@ -33,6 +39,12 @@ class FriendRepository implements IFriendRepositories {
         action_id_1: actionId1,
         action_id_2: actionId2,
       },
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await prisma.friends.delete({
+      where: { id },
     });
   }
 }

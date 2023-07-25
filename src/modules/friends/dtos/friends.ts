@@ -18,4 +18,5 @@ interface IUpdateActionStatus {
   actionId1?: number;
   actionId2?: number | null;
 }
+
 export { IFriend, ICreateFriend, IUpdateActionStatus };

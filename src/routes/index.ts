@@ -5,7 +5,7 @@ import { sessionRoutes } from "./session.routes";
 import { postRoutes } from "./post.routes";
 import { commentRoutes } from "./comment.routes";
 import { reactionRoutes } from "./reaction.routes";
-import { friendRoutes } from "./friendRoutes";
+import { friendRoutes } from "./friend.routes";
 
 const router = Router();
 
@@ -15,5 +15,4 @@ router.use("/posts", postRoutes);
 router.use("/comments", commentRoutes);
 router.use("/reactions", reactionRoutes);
 router.use("/friends", friendRoutes);
-
 export { router };

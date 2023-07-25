@@ -1,27 +1,28 @@
-import { inject, injectable } from "tsyringe";
-import { IFriendRepositories } from "@modules/friends/iRepositories/IFriendRepositories";
-import { IUuidProvider } from "@shared/container/providers/uuidProvider/IUuidProvider";
-import { IUsersRepositories } from "@modules/users/iRepositories/IUsersRepositories";
 import { AppError } from "@helpers/errorsHandler";
 import { AppResponse } from "@helpers/responseParser";
+import { IFriendsRepositories } from "@modules/friends/iRepositories/IFriendsRepositories";
+import { IUsersRepositories } from "@modules/users/iRepositories/IUsersRepositories";
+import { IUuidProvider } from "@shared/container/providers/uuidProvider/IUuidProvider";
 import { EnumFriendActions } from "src/enums/friendActions";
+import { inject, injectable } from "tsyringe";
 
 interface IRequest {
   usrId: string;
   targetId: string;
 }
+
 @injectable()
-class CreatFriendUseCase {
+class CreateFriendUseCase {
   constructor(
     @inject("FriendRepository")
-    private friendRepository: IFriendRepositories,
+    private friendRepository: IFriendsRepositories,
     @inject("UserRepository")
     private userRepository: IUsersRepositories,
     @inject("UuidProvider")
     private uuidProvider: IUuidProvider
   ) {}
 
-  async execute({ usrId, targetId }: IRequest) {
+  async execute({ usrId, targetId }: IRequest): Promise<AppResponse> {
     if (!this.uuidProvider.validateUUID(targetId)) {
       throw new AppError({
         message: "ID é inválido!",
@@ -30,26 +31,26 @@ class CreatFriendUseCase {
 
     if (usrId === targetId) {
       throw new AppError({
-        message: "Não é possível enviar uma solicitação par você mesmo!",
+        message: "Não é possível enviar uma solicitação para você mesmo!",
       });
     }
 
-    const listById = await this.userRepository.listById(targetId);
+    const listUserById = await this.userRepository.listById(targetId);
 
-    if (!listById) {
+    if (!listUserById) {
       throw new AppError({
-        message: "Usuário não encontrado",
+        message: "Usuário alvo não encontrado!",
       });
     }
 
-    const listFriendshipAlreadyExist =
-      await this.friendRepository.listAlreadyExist(usrId, targetId);
+    const listFriendshipAlreadyExists =
+      await this.friendRepository.listAlreadyExists(usrId, targetId);
 
-    if (listFriendshipAlreadyExist) {
+    if (listFriendshipAlreadyExists) {
       if (
-        listFriendshipAlreadyExist.action_id_1 ===
+        listFriendshipAlreadyExists.action_id_1 ===
           EnumFriendActions.requested &&
-        !listFriendshipAlreadyExist.action_id_2
+        !listFriendshipAlreadyExists.action_id_2
       ) {
         throw new AppError({
           message: "Solicitação já enviada!",
@@ -57,21 +58,23 @@ class CreatFriendUseCase {
       }
 
       if (
-        listFriendshipAlreadyExist.action_id_1 === EnumFriendActions.canceled ||
-        listFriendshipAlreadyExist.action_id_2 === EnumFriendActions.refused
+        listFriendshipAlreadyExists.action_id_1 ===
+          EnumFriendActions.canceled ||
+        listFriendshipAlreadyExists.action_id_2 === EnumFriendActions.refused
       ) {
         await this.friendRepository.updateActionStatus({
-          id: listFriendshipAlreadyExist.id,
+          id: listFriendshipAlreadyExists.id,
           actionId1: EnumFriendActions.requested,
           actionId2: null,
         });
+
         return new AppResponse({
-          message: "A solicitação já foi aceita!",
+          message: "Solicitação enviada com sucesso!",
         });
       }
 
       if (
-        listFriendshipAlreadyExist.action_id_2 === EnumFriendActions.accepted
+        listFriendshipAlreadyExists.action_id_2 === EnumFriendActions.accepted
       ) {
         throw new AppError({
           message: "Solicitação já foi aceita!",
@@ -99,4 +102,5 @@ class CreatFriendUseCase {
     });
   }
 }
-export { CreatFriendUseCase };
+
+export { CreateFriendUseCase };
